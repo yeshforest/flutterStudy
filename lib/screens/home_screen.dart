@@ -1,68 +1,75 @@
 import 'package:flutter/material.dart';
 
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Subpage Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: FirstPage(),
-    );
-  }
-}
-
-class FirstPage extends StatefulWidget {
-  @override
-  State<FirstPage> createState() => _FirstPage();
-}
-
-class _FirstPage extends State<FirstPage> {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sub Page Main '),
-      ),
-      body: Container(
-        child: Center(
-          child: Text('첫 번째 페이지'),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context)=> SecondPage()));
-        },
-        child: Icon(Icons.add),
-      ),
-    );
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
-class SecondPage extends StatelessWidget {
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Second Page'),
-        ),
-        body: Container(
-            child: Center(
-              child: ElevatedButton(
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-                child: Text('돌아가기'),
-              ),
-            )
-        )
-    );
+        backgroundColor: Theme.of(context).backgroundColor,
+        body: Column(
+          children: [
+            Flexible(
+                flex: 1,
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    '25:00',
+                    style: TextStyle(
+                        color: Theme.of(context).cardColor,
+                        fontSize: 89,
+                        fontWeight: FontWeight.w600),
+                  ),
+                )),
+            Flexible(
+                flex: 2,
+                child: Center(
+                    child: IconButton(
+                  iconSize: 120,
+                  color: Theme.of(context).cardColor,
+                  icon: const Icon(Icons.play_circle_outline),
+                  onPressed: () {},
+                ))),
+            Flexible(
+                flex: 1,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                          decoration:
+                              BoxDecoration(color: Theme.of(context).cardColor),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Pomodors",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .color,
+                                  )),
+                              Text('0',
+                                  style: TextStyle(
+                                    fontSize: 58,
+                                    fontWeight: FontWeight.w600,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .color,
+                                  )),
+                            ],
+                          )),
+                    ),
+                  ],
+                ))
+          ],
+        ));
   }
 }
