@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -8,6 +10,44 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  static const twentyFiveMinutes = 1500;
+  int totalSeconds = twentyFiveMinutes;
+  bool isRunning = false;
+  int totalPomodors = 0;
+  late Timer timer;
+
+  void onTick(Timer timer) {
+    if (totalSeconds == 0) {
+      setState(() {
+        totalPomodors += 1;
+        isRunning = false;
+        totalSeconds = twentyFiveMinutes;
+      });
+      timer.cancel();
+    } else {
+      setState(() {
+        totalSeconds = totalSeconds - 1;
+      });
+    }
+  }
+
+  void onStartPressed() {
+    timer = Timer.periodic(
+      Duration(seconds: 1),
+      onTick,
+    ); //괄호가 있으면 함수를 지금 실행하는 것을 의미
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  void onPausePressed() {
+    timer.cancel();
+    setState(() {
+      isRunning = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   alignment: Alignment.bottomCenter,
                   child: Text(
-                    '25:00',
+                    '$totalSeconds',
                     style: TextStyle(
                         color: Theme.of(context).cardColor,
                         fontSize: 89,
@@ -27,13 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 )),
             Flexible(
-                flex: 2,
+                flex: 3,
                 child: Center(
                     child: IconButton(
                   iconSize: 120,
                   color: Theme.of(context).cardColor,
-                  icon: const Icon(Icons.play_circle_outline),
-                  onPressed: () {},
+                  icon: isRunning
+                      ? const Icon(Icons.pause_circle_outline)
+                      : const Icon(Icons.play_circle_outline),
+                  onPressed: isRunning ? onPausePressed : onStartPressed,
                 ))),
             Flexible(
                 flex: 1,
@@ -41,8 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Expanded(
                       child: Container(
-                          decoration:
-                              BoxDecoration(color: Theme.of(context).cardColor),
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(50)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -55,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .headline1!
                                         .color,
                                   )),
-                              Text('0',
+                              Text('$totalPomodors',
                                   style: TextStyle(
                                     fontSize: 58,
                                     fontWeight: FontWeight.w600,
