@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static const twentyFiveMinutes = 1500;
+  static const twentyFiveMinutes = 10;
   int totalSeconds = twentyFiveMinutes;
   bool isRunning = false;
   int totalPomodors = 0;
@@ -47,10 +47,17 @@ class _HomeScreenState extends State<HomeScreen> {
       isRunning = false;
     });
   }
-
+void onRestart(){
+    timer.cancel();
+    setState((){
+      isRunning = false;
+      totalSeconds = twentyFiveMinutes;
+      totalPomodors=0;
+    });
+}
   String format(int seconds) {
     var duration = Duration(seconds: seconds);
-    return duration.toString().split('.').first.substring(2,7);
+    return duration.toString().split('.').first.substring(2, 7);
   }
 
   @override
@@ -72,15 +79,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 )),
             Flexible(
-                flex: 3,
+                flex: 2,
                 child: Center(
-                    child: IconButton(
-                  iconSize: 120,
-                  color: Theme.of(context).cardColor,
-                  icon: isRunning
-                      ? const Icon(Icons.pause_circle_outline)
-                      : const Icon(Icons.play_circle_outline),
-                  onPressed: isRunning ? onPausePressed : onStartPressed,
+                    child: Column(
+                  children: [
+                    IconButton(
+                      iconSize: 120,
+                      color: Theme.of(context).cardColor,
+                      icon: isRunning
+                          ? const Icon(Icons.pause_circle_outline)
+                          : const Icon(Icons.play_circle_outline),
+                      onPressed: isRunning ? onPausePressed : onStartPressed,
+                    ),
+                    IconButton(
+                        iconSize: 30,
+                        color: Theme.of(context).cardColor,
+                        icon: const Icon(Icons.restart_alt_outlined),
+                        onPressed:onRestart)
+                  ],
                 ))),
             Flexible(
                 flex: 1,
